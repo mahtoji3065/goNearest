@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { View, Text, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import TestComponent from './src/components/TestComponent';
+import Login from './src/components/Login/Login';
+import Dashboard from './src/components/Dashboard/Dashboard';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Govinda Mahto || Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+class App extends React.Component {
+    render() {
+        return (
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Login">
+                <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen
+                        name="Home"
+                        component={HomeScreen}
+                        options={{ title: 'Welcome' }}
+                    />
+                    <Stack.Screen name="Dashboard" component={Dashboard} />
+                    <Stack.Screen name="TestComponent" component={TestComponent} />
+                    <Stack.Screen name="Profile" component={ProfileScreen} />
+                    
+                </Stack.Navigator>
+            </NavigationContainer>
+        );
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator();
+
+const HomeScreen = ({ navigation, route }) => {
+    return (
+        <Button
+            title="Go to Jane's profile"
+            onPress={() =>
+                navigation.navigate('TestComponent', { name: 'Jane'})
+            }
+        />
+    );
+};
+const ProfileScreen = ({ navigation, route }) => {
+    return <Text>This is {route.params.name}'s profile</Text>;
+};
+
+export default App;
